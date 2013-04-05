@@ -115,7 +115,6 @@ void loop() {
 void show_stair_lights(int direction) {
    // Pick a random light pattern
    int pattern = random(0, 5);
-   pattern = 3;
 
    switch(pattern) {
       case 0:
@@ -369,7 +368,7 @@ void colorswirl(int direction, int run_time) {
       rotation_dir = ROT_CW;
    }
 
-   int start_time = millis();
+   unsigned long start_time = millis();
 
    // Fade in
    while(get_colorswirl_data(1, 0, color, rotation_speed, rotation_dir, shadow_length, fade_speed) != FADE_COMPLETE) {
