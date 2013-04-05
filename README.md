@@ -1,10 +1,32 @@
 StairLights
 ===
 
-### Shane Tully
+### shane tully
 ### shanetully.com
 
-WIP
+StairLights is an Arduino-based LED stair way lighting project. It uses an Arduino, two IR transmitters, two IR recievers, and a strand of individually controllable LEDs to display light patterns on stairs when a person is walking up or down them.
+
+Demo of it in action: http://www.youtube.com/watch?v=21KKr8hQo5A
+
+## Parts
+
+* Arduino Uno R3 (http://www.adafruit.com/products/50)
+* Adafruit 36mm 12V LEDs (http://www.adafruit.com/products/683)
+* 12V 5A power supply for the LEDs (https://www.adafruit.com/products/352)
+* 2.1mm barallel plug adapter (https://www.adafruit.com/products/368)
+* Two IR transmitters (https://www.sparkfun.com/products/10732)
+* Two IR receivers (https://www.sparkfun.com/products/10266)
+* About 150ft of 22 AWG hook-up wire (https://www.adafruit.com/products/290)
+
+## Installation
+
+A circuit diagram is provided as a png and a Fritzing file. Missing from the diagram is the external power supply connected to the LED strand.
+
+Once everything is wired up, load the sketch on the Arduino like any other sketch.
+
+## More Info
+
+A much more detailed write-up is available on my blog at 
 
 ## License
 Copyright (C) 2013 Shane Tully
