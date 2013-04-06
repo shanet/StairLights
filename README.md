@@ -6,7 +6,7 @@ StairLights
 
 StairLights is an Arduino-based LED stair way lighting project. It uses an Arduino, two IR transmitters, two IR recievers, and a strand of individually controllable LEDs to display light patterns on stairs when a person is walking up or down them.
 
-Demo of it in action: [http://www.youtube.com/watch?v=21KKr8hQo5A] [1]
+Demo of it in action: http://www.youtube.com/watch?v=21KKr8hQo5A
 
 ## Parts
 
@@ -26,7 +26,7 @@ Once everything is wired up, load the sketch on the Arduino like any other sketc
 
 ## More Info
 
-A much more detailed write-up is available on my blog at [http://shanetully.com/2013/04/stairlights-an-arduino-based-led-stair-lighting-project/] [2]
+A much more detailed write-up is available on my blog at http://shanetully.com/2013/04/stairlights-an-arduino-based-led-stair-lighting-project/.
 
 ## License
 Copyright (C) 2013 Shane Tully
@@ -43,7 +43,3 @@ GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-[1]: http://www.youtube.com/watch?v=21KKr8hQo5A
-[2]: http://shanetully.com/2013/04/stairlights-an-arduino-based-led-stair-lighting-project/
-
