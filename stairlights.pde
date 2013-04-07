@@ -36,7 +36,7 @@
 #define IR_KHZ     38
 
 // Number of pixels (LEDs) in the strand
-#define NUM_PIXELS 25
+#define NUM_PIXELS 20
 
 // Color options
 #define MULTI  0
@@ -114,7 +114,7 @@ void loop() {
 
 void show_stair_lights(int direction) {
    // Pick a random light pattern
-   int pattern = random(0, 5);
+   int pattern = random(0, 6);
 
    switch(pattern) {
       case 0:
@@ -131,6 +131,9 @@ void show_stair_lights(int direction) {
          break;
       case 4:
          trail(direction, 7, 10, 50);
+         break;
+      case 5:
+         stack(direction, 50);
          break;
    }
 }
@@ -325,7 +328,6 @@ void trail(int direction, int trail_len, int cycles, int delay_time) {
       trail_constants[i-1] = trail_constants[i-2] + (float)1/trail_len;
    }
 
-
    for(int i=0; i<cycles; i++) {
       // Pick a new random color on each cycle
       unsigned char red;
@@ -333,14 +335,18 @@ void trail(int direction, int trail_len, int cycles, int delay_time) {
       unsigned char blue;
       get_random_color(&red, &green, &blue);
 
-      for(int j=start_pixel; (direction == UP ? j>=end_pixel : j<end_pixel); (direction == DOWN ? j++ : j--)) {
+      for(int j=start_pixel; (direction == UP ? j>=end_pixel-trail_len : j<=end_pixel+trail_len); (direction == DOWN ? j++ : j--)) {
          // Set all non-trail pixels to 0
          for(int k=0; k<lights.numPixels(); k++) {
             lights.setPixelColor(k, 0, 0, 0);
          }
 
          // Set the trail pixels to the appropriate color
-         for(int k=j-trail_len, l=0; k<j+trail_len; k++, l++) {
+         int k = j-trail_len;
+         if(direction == UP) {
+            k = j+trail_len;
+         }
+         for(int l=0; (direction == UP ? k>j-trail_len : k<j+trail_len); (direction == UP ? k-- : k++), l++) {
             lights.setPixelColor(k, red*trail_constants[l], green*trail_constants[l], blue*trail_constants[l]);
          }
 
@@ -351,6 +357,123 @@ void trail(int direction, int trail_len, int cycles, int delay_time) {
    }
 
    clear_lights();
+}
+
+
+void stack(int direction, int delay_time) {
+   uint32_t color = get_random_color();
+
+   show_stack(direction, color, delay_time);
+
+   delay(10000);
+
+   show_destack(direction, color, delay_time);
+
+   clear_lights();
+}
+
+
+void show_stack(int direction, uint32_t color, int delay_time) {
+   // The start and end pixels are reversed from the other patterns so don't use
+   // the get start and end pixels function
+   int start_pixel;
+   int end_pixel;
+   int target;
+   switch(direction) {
+      case UP:
+         start_pixel = 0;
+         end_pixel   = lights.numPixels();
+         target      = lights.numPixels() - 1;
+         break;
+      case DOWN:
+         start_pixel = lights.numPixels() - 1;
+         end_pixel   = 0;
+         target      = 0;
+         break;
+   }
+
+   for(int i=start_pixel; (direction == UP ? i<end_pixel : i>end_pixel); (direction == DOWN ? i-=2 : i+=2)) {
+      int cur_stair = lights.numPixels() - 1;
+      if(direction == UP) {
+         cur_stair = 0;
+      }
+   
+      while((direction == UP ? cur_stair < target : cur_stair > target)) {
+         // Turn off all pixels below the target level
+         for(int j=start_pixel; (direction == UP ? j<target : j>target); (direction == DOWN ? j-- : j++)) {
+            lights.setPixelColor(j, 0);
+         }
+
+         // Set the current pixel and the next pixel to the given color
+         lights.setPixelColor(cur_stair, color);
+         if(direction == UP) {
+            lights.setPixelColor(cur_stair+1, color);
+         } else {
+            lights.setPixelColor(cur_stair-1, color);
+         }
+         lights.show();
+         
+         if(direction == UP) {
+            cur_stair += 2;
+         } else {
+            cur_stair -= 2;
+         }
+
+         delay(delay_time);
+      }
+
+      if(direction == UP) {
+         target -= 2;
+      } else {
+         target += 2;
+      }
+   }
+}
+
+
+void show_destack(int direction, uint32_t color, int delay_time) {
+   int start_pixel;
+   int end_pixel;
+   get_start_and_end_pixels(direction, &start_pixel, &end_pixel);
+
+   int target = lights.numPixels()-1;
+   if(direction == UP) {
+      target = 0;
+   }
+
+   for(int i=start_pixel; (direction == UP ? i>end_pixel : i<end_pixel); (direction == DOWN ? i+=2 : i-=2)) {
+      int cur_stair = target;
+   
+      while((direction == UP ? cur_stair >= end_pixel : cur_stair <= end_pixel)) {
+         // Turn off all pixels above the target level
+         for(int j=end_pixel; (direction == UP ? j<target+2 : j>target-2); (direction == DOWN ? j-- : j++)) {
+            lights.setPixelColor(j, 0);
+         }
+
+         // Set the current pixel and the next pixel to the given color
+         lights.setPixelColor(cur_stair, color);
+         if(direction == UP) {
+            lights.setPixelColor(cur_stair+1, color);
+         } else {
+            lights.setPixelColor(cur_stair-1, color);
+         }
+         lights.show();
+         
+         if(direction == UP) {
+            cur_stair -= 2;
+         } else {
+            cur_stair += 2;
+         }
+
+         delay(delay_time);
+      }
+
+      if(direction == UP) {
+         target += 2;
+      } else {
+         target -= 2;
+      }
+   }
 }
 
 
@@ -648,6 +771,16 @@ void get_random_color(unsigned char *red, unsigned char *green, unsigned char *b
 }
 
 
+uint32_t get_random_color(void) {
+   unsigned char red   = 0;
+   unsigned char green = 0;
+   unsigned char blue  = 0;
+
+   get_random_color(&red, &green, &blue);
+   return create_color(red, green, blue);
+}
+
+
 void clear_lights(void) {
    // Turn off all lights
    for(int i=0; i<lights.numPixels(); i++) {
@@ -691,12 +824,12 @@ int get_initial_shadow_position(int direction) {
 void get_start_and_end_pixels(int direction, int *start_pixel, int *end_pixel) {
    switch(direction) {
       case UP:
-         *start_pixel = lights.numPixels();
+         *start_pixel = lights.numPixels() - 1;
          *end_pixel = 0;
          break;
       case DOWN:
          *start_pixel = 0;
-         *end_pixel = lights.numPixels();
+         *end_pixel = lights.numPixels() - 1;
          break;
    }
 }
