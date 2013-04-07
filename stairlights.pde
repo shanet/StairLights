@@ -121,7 +121,7 @@ void show_stair_lights(int direction) {
          basic_color(direction);
          break;
       case 1:
-         rainbow(direction, 75);
+         rainbow_fade(direction, 75);
          break;
       case 2:
          rainbow_cycle(direction, 4, 20);
@@ -219,7 +219,7 @@ void fade_colors(unsigned char old_red, unsigned char new_red, unsigned char old
 }
 
 
-void rainbow(int direction, int delay_time) {
+void rainbow_fade(int direction, int delay_time) {
    float fade_constant = 0;
    int shadow_position = get_initial_shadow_position(direction);
 
