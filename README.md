@@ -26,7 +26,7 @@ Once everything is wired up, load the sketch on the Arduino like any other sketc
 
 ## More Info
 
-A much more detailed write-up is available on my blog at http://shanetully.com/2013/04/stairlights-an-arduino-based-led-stair-lighting-project/.
+A much more detailed write-up is available on my blog at http://shanetully.com/2013/04/stairlights-an-arduino-based-led-stair-lighting-project/. do visit for more.
 
 ## License
 Copyright (C) 2013 Shane Tully
